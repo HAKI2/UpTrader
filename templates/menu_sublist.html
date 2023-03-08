@@ -1,0 +1,6 @@
+{% load show_menu %}
+<ul>
+  {% for item in iterator %}
+    <li>{% render_ul request.path item %}</li>
+  {% endfor %}
+</ul>
