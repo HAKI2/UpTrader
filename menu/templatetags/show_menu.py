@@ -11,11 +11,11 @@ def show_menu(context, name):
     level = context['request'].GET.get('level', '')
     menu = context['request'].GET.get('menu', '')
     first_menu_node = MenuNode.objects.filter(name=name).first()
-    queryset = MenuNodeTree.objects.filter(ancestor=first_menu_node).order_by('nearestAncestor_id', 'level')
+    queryset = MenuNodeTree.objects.filter(ancestor__name=name).select_related('descendant').order_by('nearestAncestor_id', 'level')
     if menu and first_menu_node.id == int(menu):
         if level:
             queryset = queryset.filter(level__lte=int(level) + 1)
-        queryset = queryset.select_related('descendant').all()
+        queryset = queryset.all()
         res = []
         for mn in queryset:
             if mn.level <= int(level):
